@@ -1,11 +1,10 @@
-import { HomeContainer, TitleContainer } from './styles'
+import { Intro } from './components/Intro/Index'
+import { HomeContainer } from './styles'
 
 export function Home() {
   return (
     <HomeContainer>
-      <TitleContainer>
-        Encontre o café perfeito para qualquer hora do dia
-      </TitleContainer>
+      <Intro />
     </HomeContainer>
   )
 }

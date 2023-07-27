@@ -2,9 +2,15 @@ import styled from 'styled-components'
 
 export const HeaderContainer = styled.header`
   display: flex;
-  padding: 32px 160px;
+  padding: 2rem 5rem;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
+  nav {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
 `
 
 export const ButtonLocale = styled.button`
