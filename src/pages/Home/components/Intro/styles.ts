@@ -10,6 +10,7 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding-left: 4rem;
   h1 {
     font-family: 'Baloo 2';
     font-weight: 800;
@@ -46,4 +47,5 @@ export const Details = styled.div`
 
 export const ImageContainer = styled.div`
   display: flex;
+  padding-right: 4rem;
 `
