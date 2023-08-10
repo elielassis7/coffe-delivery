@@ -15,11 +15,13 @@ export function Header() {
           <MapPin weight="fill" />
           Sarandi - PR
         </ButtonLocale>
-        <ButtonCart>
-          <NavLink to="/checkout" title="Ver sua compras">
+
+        <NavLink to="/checkout" title="Ver sua compras">
+          <ButtonCart>
+            {' '}
             <ShoppingCart weight="fill" />
-          </NavLink>
-        </ButtonCart>
+          </ButtonCart>
+        </NavLink>
       </nav>
     </HeaderContainer>
   )

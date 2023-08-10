@@ -1,5 +1,7 @@
 import styled from 'styled-components'
-export const HomeContainer = styled.div``
+export const HomeContainer = styled.div`
+  width: 100%;
+`
 
 export const TitleGrid = styled.h2`
   font-family: 'Baloo 2';

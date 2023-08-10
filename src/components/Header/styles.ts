@@ -38,4 +38,5 @@ export const ButtonCart = styled.button`
   svg {
     color: ${(props) => props.theme['yellow-dark']};
   }
+  cursor: pointer;
 `

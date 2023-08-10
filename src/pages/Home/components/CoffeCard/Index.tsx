@@ -1,6 +1,7 @@
-import { AmountCoffe, ButtonCart, Card, PriceContainer, Tags } from './styles'
+import { ButtonCart, Card, PriceContainer, Tags } from './styles'
 import { ShoppingCart } from 'phosphor-react'
 import { CoffeDataType } from '../../../../context/CoffeContext'
+import { AmountCoffe } from '../AmountCoffe/Index'
 
 export function CoffeCard({
   pathImage,
@@ -23,11 +24,7 @@ export function CoffeCard({
           <p>{description}</p>
           <PriceContainer>
             <h2>R$9,90</h2>
-            <AmountCoffe>
-              <button>-</button>
-              <span>1</span>
-              <button>+</button>
-            </AmountCoffe>
+            <AmountCoffe />
             <ButtonCart>
               <ShoppingCart weight="fill" size={14} />
             </ButtonCart>

@@ -70,17 +70,6 @@ export const PriceContainer = styled.div`
     color: ${(props) => props.theme['base-title']};
   }
 `
-export const AmountCoffe = styled.div`
-  background: ${(props) => props.theme['base-button']};
-  border: none;
-  button {
-    background: transparent;
-    color: ${(props) => props.theme.purple};
-    width: 1.5rem;
-    border: none;
-    height: 100%;
-  }
-`
 
 export const ButtonCart = styled.button`
   display: flex;
