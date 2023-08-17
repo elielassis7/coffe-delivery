@@ -1,3 +1,5 @@
+import { ReactNode, useState } from 'react'
+
 export interface CoffeDataType {
   id?: number
   pathImage: string
@@ -6,6 +8,11 @@ export interface CoffeDataType {
   description: string
 }
 
-export function CoffeContextProvider() {
-  return <div></div>
+type CoffeContextData = {
+  children: ReactNode
+}
+
+export function CoffeContextProvider({ children }: CoffeContextData) {
+  const [coffeSelect, setCoffeSelect] = useState([])
+  return <div>{children}</div>
 }
