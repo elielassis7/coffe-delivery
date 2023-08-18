@@ -18,7 +18,7 @@ import {
   HeaderFormPay,
   InputLarge,
   InputMedium,
-  InputSmall,
+  InputSelect,
   OrderContainer,
   Titles,
 } from './styles'
@@ -31,21 +31,76 @@ import {
   Trash,
 } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Expresso from '../../assets/images/Expresso.svg'
 import Latte from '../../assets/images/Latte.svg'
 import { AmountCoffe } from '../Home/components/AmountCoffe/Index'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ContextOrder } from '../../context/CoffeContext'
 
 export interface StyledButtonProps {
   clicked: boolean
 }
 
-export function Checkout() {
-  const { register, handleSubmit } = useForm()
-  const [clickedButton, setClickedButton] = useState(0)
+const newOrderFormValidationSchema = z.object({
+  cep: z.string().min(8).max(8),
+  rua: z.string(),
+  numero: z.number(),
+  complemento: z.string(),
+  bairro: z.string(),
+  cidade: z.string(),
+  uf: z.string(),
+})
 
-  const handleClick = (buttonNumber: number) => {
-    setClickedButton(buttonNumber)
+type newOrderFormData = z.infer<typeof newOrderFormValidationSchema>
+
+const states = [
+  'AC',
+  'AL',
+  'AP',
+  'AM',
+  'BA',
+  'CE',
+  'DF',
+  'ES',
+  'GO',
+  'MA',
+  'MT',
+  'MS',
+  'MG',
+  'PA',
+  'PB',
+  'PR',
+  'PE',
+  'PI',
+  'RJ',
+  'RN',
+  'RS',
+  'RO',
+  'RR',
+  'SC',
+  'SP',
+  'SE',
+  'TO',
+]
+
+export function Checkout() {
+  const { CreateOrder, SelectPayment } = useContext(ContextOrder)
+  const newOrderForm = useForm<newOrderFormData>({
+    resolver: zodResolver(newOrderFormValidationSchema),
+  })
+
+  const { register, handleSubmit } = newOrderForm
+  const [clickedButton, setClickedButton] = useState('')
+
+  const handleClick = (buttonName: string) => {
+    setClickedButton(buttonName)
+    SelectPayment(buttonName)
+  }
+
+  function handleCreateNewOrder(data: newOrderFormData) {
+    CreateOrder(data)
   }
 
   return (
@@ -53,7 +108,7 @@ export function Checkout() {
       <Cards>
         <Titles>Complete sue pedido</Titles>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(handleCreateNewOrder)}>
           <FormCard>
             <HeaderForm>
               <div>
@@ -63,13 +118,13 @@ export function Checkout() {
               <p>Informe o endereço onde deseja receber seu pedido</p>
             </HeaderForm>
             <FormContainer>
-              <InputMedium placeholder="CEP" {...register('cep')} />
+              <InputMedium
+                placeholder="CEP"
+                maxLength={8}
+                {...register('cep')}
+              />
               <FormRows>
-                <InputLarge
-                  placeholder="Rua"
-                  maxLength={8}
-                  {...register('rua')}
-                />
+                <InputLarge placeholder="Rua" id="rua" {...register('rua')} />
               </FormRows>
               <FormRows>
                 <InputMedium placeholder="Número" {...register('numero')} />
@@ -81,7 +136,17 @@ export function Checkout() {
               <FormRows>
                 <InputMedium placeholder="Bairro" {...register('bairro')} />
                 <InputLarge placeholder="Cidade" {...register('cidade')} />
-                <InputSmall placeholder="UF" {...register('uf')} />
+                {/* <InputSmall placeholder="UF" {...register('uf')} /> */}
+                <InputSelect {...register('uf')}>
+                  {states.map((item) => (
+                    <option key={item} value="{item}">
+                      {item}
+                    </option>
+                  ))}
+                  <option value="value1">PR</option>
+                  <option value="value2">SC</option>
+                  <option value="value3">RS</option>
+                </InputSelect>
               </FormRows>
             </FormContainer>
           </FormCard>
@@ -101,24 +166,24 @@ export function Checkout() {
               <FormRows>
                 <ButtonCredit
                   type="button"
-                  clicked={clickedButton === 1}
-                  onClick={() => handleClick(1)}
+                  clicked={clickedButton === 'cartão de credito'}
+                  onClick={() => handleClick('cartão de credito')}
                 >
                   <CreditCard size={16} />
                   <label htmlFor="credit">cartão de credito</label>
                 </ButtonCredit>
                 <ButtonDebit
                   type="button"
-                  clicked={clickedButton === 2}
-                  onClick={() => handleClick(2)}
+                  clicked={clickedButton === 'cartão de débito'}
+                  onClick={() => handleClick('cartão de débito')}
                 >
                   <Bank size={16} />
                   <label htmlFor="debit">cartão de débito</label>
                 </ButtonDebit>
                 <ButtonCash
                   type="button"
-                  clicked={clickedButton === 3}
-                  onClick={() => handleClick(3)}
+                  clicked={clickedButton === 'dinheiro/pix'}
+                  onClick={() => handleClick('dinheiro/pix')}
                 >
                   <Money size={16} />
                   <label htmlFor="cash">dinheiro/pix</label>

@@ -85,8 +85,16 @@ const InputBase = styled.input`
   color: ${(props) => props.theme['base-text']};
 `
 
-export const InputSmall = styled(InputBase)`
-  width: 3.75rem;
+export const InputSelect = styled.select`
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  gap: 4px;
+  border-radius: 6px;
+  border: 1px solid ${(props) => props.theme['base-button']};
+  background: ${(props) => props.theme['base-input']};
+  color: ${(props) => props.theme['base-text']};
+  width: 3.85rem;
 `
 
 export const InputMedium = styled(InputBase)`

@@ -12,8 +12,12 @@ import {
 } from './styles'
 import ImageSuccess from '../../assets/ImageSuccess.svg'
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
+import { ContextOrder } from '../../context/CoffeContext'
+import { useContext } from 'react'
 
 export function Success() {
+  const { addressLine1, addressLine2, selectPay } = useContext(ContextOrder)
+
   return (
     <ContainerSuccess>
       <HeaderContainerSuccess>
@@ -28,9 +32,9 @@ export function Success() {
             </CircleLocal>
             <DeliveryData>
               <p>
-                Entrega em <strong>Rua Cascavel, 205</strong>
+                Entrega em <strong>{addressLine1}</strong>
               </p>
-              <p>Dom Bosco - Sarandi, PR</p>
+              <p>{addressLine2}</p>
             </DeliveryData>
           </InfoRow>
           <InfoRow>
@@ -51,7 +55,7 @@ export function Success() {
             <DeliveryData>
               <p>Pagamento na Entrega</p>
               <p>
-                <strong>Cartão de crédito</strong>
+                <strong>{selectPay}</strong>
               </p>
             </DeliveryData>
           </InfoRow>

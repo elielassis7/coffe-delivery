@@ -1,7 +1,8 @@
-import { MapPin, ShoppingCart } from 'phosphor-react'
-import { ButtonCart, ButtonLocale, HeaderContainer } from './styles'
+import { ShoppingCart } from 'phosphor-react'
+import { ButtonCart, HeaderContainer } from './styles'
 import logoCoffe from '../../assets/Logo.svg'
 import { NavLink } from 'react-router-dom'
+import { Location } from './component/Index'
 
 export function Header() {
   return (
@@ -11,10 +12,7 @@ export function Header() {
       </NavLink>
 
       <nav>
-        <ButtonLocale>
-          <MapPin weight="fill" />
-          Sarandi - PR
-        </ButtonLocale>
+        <Location />
 
         <NavLink to="/checkout" title="Ver sua compras">
           <ButtonCart>
