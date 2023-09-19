@@ -77,6 +77,9 @@ export const ButtonCart = styled.button`
   align-items: center;
   justify-content: center;
   background: ${(props) => props.theme['purple-dark']};
+  hover: {
+    background: ${(props) => props.theme.purple};
+  }
   border: none;
   width: 1.625rem;
   height: 1.625rem;

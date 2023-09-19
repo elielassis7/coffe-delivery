@@ -37,6 +37,9 @@ export const ButtonCart = styled.button`
     color: ${(props) => props.theme['yellow-dark']};
   }
   cursor: pointer;
+  hover: {
+    background: ${(props) => props.theme.yellow};
+  }
 `
 
 export const AmountCart = styled.label`
