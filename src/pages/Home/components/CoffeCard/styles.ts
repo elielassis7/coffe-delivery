@@ -82,6 +82,7 @@ export const ButtonCart = styled.button`
   height: 1.625rem;
   border-radius: 6px;
   padding: 5px;
+  cursor: pointer;
   svg {
     fill: ${(props) => props.theme.white};
   }

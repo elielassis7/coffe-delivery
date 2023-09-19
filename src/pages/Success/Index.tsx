@@ -13,10 +13,18 @@ import {
 import ImageSuccess from '../../assets/ImageSuccess.svg'
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
 import { ContextOrder } from '../../context/CoffeContext'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export function Success() {
-  const { addressLine1, addressLine2, selectPay } = useContext(ContextOrder)
+  const { addressDelivery } = useContext(ContextOrder)
+  const pages = useNavigate()
+
+  useEffect(() => {
+    if (addressDelivery.cep === '') {
+      pages('/')
+    }
+  }, [addressDelivery, pages])
 
   return (
     <ContainerSuccess>
@@ -32,9 +40,16 @@ export function Success() {
             </CircleLocal>
             <DeliveryData>
               <p>
-                Entrega em <strong>{addressLine1}</strong>
+                Entrega em{' '}
+                <strong>
+                  Rua {addressDelivery.rua}, nº{addressDelivery.numero} -{' '}
+                  {addressDelivery.complemento}
+                </strong>
               </p>
-              <p>{addressLine2}</p>
+              <p>
+                {addressDelivery.bairro} - {addressDelivery.cidade},{' '}
+                {addressDelivery.uf}
+              </p>
             </DeliveryData>
           </InfoRow>
           <InfoRow>
@@ -55,7 +70,7 @@ export function Success() {
             <DeliveryData>
               <p>Pagamento na Entrega</p>
               <p>
-                <strong>{selectPay}</strong>
+                <strong>{addressDelivery.typePay}</strong>
               </p>
             </DeliveryData>
           </InfoRow>

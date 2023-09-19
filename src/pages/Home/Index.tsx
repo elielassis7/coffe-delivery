@@ -13,10 +13,12 @@ export function Home() {
         {data.map((item) => (
           <CoffeCard
             key={item.id}
+            id={item.id}
             pathImage={item.pathImage}
             tag={item.tag}
             name={item.name}
             description={item.description}
+            value={item.value}
           />
         ))}
       </GridCoffeList>

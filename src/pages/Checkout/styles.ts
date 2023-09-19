@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import { StyledButtonProps } from './Index'
 
 export const CheckoutContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
   padding: 5rem;
+  margin-top: 108px;
 `
 
 export const Cards = styled.div`
@@ -72,6 +72,15 @@ export const FormRows = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+  input[type='radio'] {
+    display: none;
+  }
+  input[type='radio']:checked + label {
+    border: 1px solid ${(props) => props.theme.purple};
+  }
+  :hover {
+    background: ${(props) => props.theme['base-hover']};
+  }
 `
 
 const InputBase = styled.input`
@@ -112,82 +121,27 @@ export const HeaderFormPay = styled(HeaderForm)`
   }
 `
 
-export const ButtonPayment = styled.button<StyledButtonProps>`
+export const ButtonPayment = styled.label`
   display: flex;
   align-items: center;
   padding: 0.7rem;
   gap: 0.75rem;
   flex: 1 0 0;
-  :hover {
-    background: ${(props) => props.theme['base-hover']};
-  }
-
+  border-radius: 6px;
   svg {
     color: ${(props) => props.theme.purple};
   }
-  label {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1.6;
-    color: ${(props) => props.theme['base-text']};
-  }
-`
 
-export const ButtonCredit = styled(ButtonPayment)`
-  border: ${(props) =>
-    props.clicked ? `1px solid ${props.theme['brand-purple']}` : 'none'};
-  :hover {
-    background: ${(props) => props.theme['base-hover']};
-  }
-`
-
-export const ButtonDebit = styled(ButtonPayment)`
-  border: ${(props) =>
-    props.clicked ? `1px solid ${props.theme['brand-purple']}` : 'none'};
-`
-
-export const ButtonCash = styled(ButtonPayment)`
-  border: ${(props) =>
-    props.clicked ? `1px solid ${props.theme['brand-purple']}` : 'none'};
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: ${(props) => props.theme['base-text']};
 `
 
 export const OrderContainer = styled(Container)`
   width: 28rem;
   border-radius: 6px 44px;
-`
-
-export const CardCoffe = styled.div`
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 8px 4px;
-  margin-bottom: 1.5rem;
-  img {
-    width: 64px;
-    height: 64px;
-  }
-  label {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: ${(props) => props.theme['base-text']};
-  }
-`
-export const ControlQuanty = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  h2 {
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.3;
-    color: ${(props) => props.theme['base-subtitle']};
-  }
 `
 
 export const ButtonRemove = styled.button`

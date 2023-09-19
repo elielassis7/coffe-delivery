@@ -1,6 +1,7 @@
 import { styled } from 'styled-components'
 
 export const ContainerSuccess = styled.div`
+  margin-top: 108px;
   background: ${(props) => props.theme['base-background']};
 `
 

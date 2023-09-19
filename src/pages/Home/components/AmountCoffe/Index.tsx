@@ -1,27 +1,20 @@
 import { Minus, Plus } from 'phosphor-react'
 import { AmountCoffeContainer } from './styles'
-import { useState } from 'react'
 
-export function AmountCoffe() {
-  const [count, setCount] = useState(1)
+interface AmountCoffeProps {
+  amount: number
+  minus: () => void
+  plus: () => void
+}
 
-  function handlePlusAmount() {
-    setCount(count + 1)
-  }
-
-  function handleMinusAmount() {
-    if (count > 1) {
-      setCount(count - 1)
-    }
-  }
-
+export function AmountCoffe(props: AmountCoffeProps) {
   return (
     <AmountCoffeContainer>
-      <button onClick={handleMinusAmount}>
+      <button onClick={props.minus}>
         <Minus size={14} />
       </button>
-      <span>{count}</span>
-      <button onClick={handlePlusAmount}>
+      <span>{props.amount}</span>
+      <button onClick={props.plus}>
         <Plus size={14} />
       </button>
     </AmountCoffeContainer>

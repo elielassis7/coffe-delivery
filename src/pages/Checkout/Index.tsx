@@ -1,14 +1,9 @@
-import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
-  ButtonCash,
-  ButtonCredit,
-  ButtonDebit,
   ButtonFinished,
-  ButtonRemove,
-  CardCoffe,
+  ButtonPayment,
   Cards,
   CheckoutContainer,
-  ControlQuanty,
   DetailsOrder,
   Divider,
   FormCard,
@@ -28,16 +23,13 @@ import {
   CurrencyDollar,
   MapPinLine,
   Money,
-  Trash,
 } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
-import { useContext, useState } from 'react'
-import Expresso from '../../assets/images/Expresso.svg'
-import Latte from '../../assets/images/Latte.svg'
-import { AmountCoffe } from '../Home/components/AmountCoffe/Index'
+import { useContext, useEffect } from 'react'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ContextOrder } from '../../context/CoffeContext'
+import { SelectedCoffeCard } from './components/SelectedCoffeCard/Index'
 
 export interface StyledButtonProps {
   clicked: boolean
@@ -45,12 +37,18 @@ export interface StyledButtonProps {
 
 const newOrderFormValidationSchema = z.object({
   cep: z.string().min(8).max(8),
-  rua: z.string(),
-  numero: z.number(),
-  complemento: z.string(),
-  bairro: z.string(),
-  cidade: z.string(),
+  rua: z.string().nonempty().min(3),
+  numero: z.string().min(1),
+  complemento: z.string().min(1),
+  bairro: z.string().nonempty(),
+  cidade: z
+    .string()
+    .min(3)
+    .transform((value) => value.split('/')[0])
+    .transform((value) => value.split('-')[0])
+    .transform((value) => value.split(' ')[0]),
   uf: z.string(),
+  typePay: z.string().nonempty().min(2),
 })
 
 type newOrderFormData = z.infer<typeof newOrderFormValidationSchema>
@@ -86,29 +84,50 @@ const states = [
 ]
 
 export function Checkout() {
-  const { CreateOrder, SelectPayment } = useContext(ContextOrder)
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+    })
+  }, [])
+
+  const { coffes, totalOrder, addNewAddress, resetCoffes } =
+    useContext(ContextOrder)
+  const pages = useNavigate()
+
+  useEffect(() => {
+    if (coffes.length === 0) {
+      pages('/')
+    }
+  }, [coffes, pages])
+
   const newOrderForm = useForm<newOrderFormData>({
     resolver: zodResolver(newOrderFormValidationSchema),
   })
 
   const { register, handleSubmit } = newOrderForm
-  const [clickedButton, setClickedButton] = useState('')
 
-  const handleClick = (buttonName: string) => {
-    setClickedButton(buttonName)
-    SelectPayment(buttonName)
-  }
+  const totalParse = totalOrder.toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+  })
 
-  function handleCreateNewOrder(data: newOrderFormData) {
-    CreateOrder(data)
+  const totalWithDelivery = (totalOrder + 3.5).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+
+  function handleCreateNewOrder(dataForm: newOrderFormData) {
+    addNewAddress(dataForm)
+    resetCoffes()
+    pages('/success')
   }
 
   return (
     <CheckoutContainer>
       <Cards>
-        <Titles>Complete sue pedido</Titles>
+        <form>
+          <Titles>Complete sue pedido</Titles>
 
-        <form onSubmit={handleSubmit(handleCreateNewOrder)}>
           <FormCard>
             <HeaderForm>
               <div>
@@ -136,16 +155,13 @@ export function Checkout() {
               <FormRows>
                 <InputMedium placeholder="Bairro" {...register('bairro')} />
                 <InputLarge placeholder="Cidade" {...register('cidade')} />
-                {/* <InputSmall placeholder="UF" {...register('uf')} /> */}
                 <InputSelect {...register('uf')}>
+                  <option value="">--</option>
                   {states.map((item) => (
-                    <option key={item} value="{item}">
+                    <option key={item} value={item}>
                       {item}
                     </option>
                   ))}
-                  <option value="value1">PR</option>
-                  <option value="value2">SC</option>
-                  <option value="value3">RS</option>
                 </InputSelect>
               </FormRows>
             </FormContainer>
@@ -164,30 +180,38 @@ export function Checkout() {
                 </p>
               </HeaderFormPay>
               <FormRows>
-                <ButtonCredit
-                  type="button"
-                  clicked={clickedButton === 'cartão de credito'}
-                  onClick={() => handleClick('cartão de credito')}
-                >
+                <input
+                  type="radio"
+                  {...register('typePay')}
+                  id="Credit"
+                  value={'Cartão de Crédito'}
+                />
+                <ButtonPayment htmlFor="Credit">
                   <CreditCard size={16} />
-                  <label htmlFor="credit">cartão de credito</label>
-                </ButtonCredit>
-                <ButtonDebit
-                  type="button"
-                  clicked={clickedButton === 'cartão de débito'}
-                  onClick={() => handleClick('cartão de débito')}
-                >
+                  Cartão de Credito
+                </ButtonPayment>
+
+                <input
+                  type="radio"
+                  {...register('typePay')}
+                  id="Debit"
+                  value={'Cartão de Débito'}
+                />
+                <ButtonPayment htmlFor="Debit">
                   <Bank size={16} />
-                  <label htmlFor="debit">cartão de débito</label>
-                </ButtonDebit>
-                <ButtonCash
-                  type="button"
-                  clicked={clickedButton === 'dinheiro/pix'}
-                  onClick={() => handleClick('dinheiro/pix')}
-                >
+                  Cartão de Debito
+                </ButtonPayment>
+
+                <input
+                  type="radio"
+                  {...register('typePay')}
+                  id="Cash"
+                  value={'Dinheiro/Pix'}
+                />
+                <ButtonPayment htmlFor="Cash">
                   <Money size={16} />
-                  <label htmlFor="cash">dinheiro/pix</label>
-                </ButtonCash>
+                  Dinheiro/Pix
+                </ButtonPayment>
               </FormRows>
             </FormContainer>
           </FormCard>
@@ -196,40 +220,24 @@ export function Checkout() {
       <Cards>
         <Titles>Cafés Selecionados</Titles>
         <OrderContainer>
-          <CardCoffe>
-            <img src={Expresso} alt="" />
-            <ControlQuanty>
-              <h2>Expresso</h2>
-              <FormRows>
-                <AmountCoffe />
-                <ButtonRemove>
-                  <Trash size={16} />
-                  <span>Remover</span>
-                </ButtonRemove>
-              </FormRows>
-            </ControlQuanty>
-            <label>R$ 9,90</label>
-          </CardCoffe>
-          <Divider />
-          <CardCoffe>
-            <img src={Latte} alt="" />
-            <ControlQuanty>
-              <h2>Latte</h2>
-              <FormRows>
-                <AmountCoffe />
-                <ButtonRemove>
-                  <Trash size={16} />
-                  <span>Remover</span>
-                </ButtonRemove>
-              </FormRows>
-            </ControlQuanty>
-            <label>R$ 9,90</label>
-          </CardCoffe>
-          <Divider />
+          {coffes.map((item) => (
+            <div key={item.id}>
+              <SelectedCoffeCard
+                id={item.idCoffe}
+                image={item.pathImage}
+                name={item.name}
+                quantity={item.quanty}
+                total={item.total}
+              />
+              <Divider />
+            </div>
+          ))}
+
           <DetailsOrder>
             <div>
               <label>Total de itens</label>
-              <span>R$ 29,70</span>
+
+              <span>{totalParse}</span>
             </div>
             <div>
               <label>Entrega</label>
@@ -237,12 +245,15 @@ export function Checkout() {
             </div>
             <div>
               <h3>Total</h3>
-              <h3>R$ 33,20</h3>
+              <h3>{totalWithDelivery}</h3>
             </div>
 
-            <NavLink to="/success" title="Confirmar pedido">
-              <ButtonFinished>Confirmar pedido</ButtonFinished>
-            </NavLink>
+            <ButtonFinished
+              onClick={handleSubmit(handleCreateNewOrder)}
+              title="Confirmar pedido"
+            >
+              Confirmar pedido
+            </ButtonFinished>
           </DetailsOrder>
         </OrderContainer>
       </Cards>
