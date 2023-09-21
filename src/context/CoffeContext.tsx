@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useReducer } from 'react'
+import { ReactNode, createContext, useEffect, useReducer } from 'react'
 import {
   Coffe,
   coffeReducer,
@@ -41,20 +41,38 @@ type CoffeContextProps = {
 }
 
 export function CoffeContextProvider({ children }: CoffeContextProps) {
-  const [coffeState, dispatch] = useReducer(coffeReducer, {
-    coffes: [],
-    addressDelivery: {
-      cep: '',
-      rua: '',
-      numero: '',
-      complemento: '',
-      bairro: '',
-      cidade: '',
-      uf: '',
-      typePay: '',
+  const [coffeState, dispatch] = useReducer(
+    coffeReducer,
+    {
+      coffes: [],
+      addressDelivery: {
+        cep: '',
+        rua: '',
+        numero: '',
+        complemento: '',
+        bairro: '',
+        cidade: '',
+        uf: '',
+        typePay: '',
+      },
+      totalOrder: 0,
     },
-    totalOrder: 0,
-  })
+    () => {
+      const storagedData = localStorage.getItem(
+        '@Coffe-Delivery:coffe-state-1.0.0',
+      )
+
+      if (storagedData) {
+        return JSON.parse(storagedData)
+      }
+    },
+  )
+
+  useEffect(() => {
+    const stateJson = JSON.stringify(coffeState)
+
+    localStorage.setItem('@Coffe-Delivery:coffe-state-1.0.0', stateJson)
+  }, [coffeState])
 
   const { coffes, addressDelivery, totalOrder } = coffeState
 
