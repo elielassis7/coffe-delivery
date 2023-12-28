@@ -209,7 +209,7 @@ export const ButtonFinished = styled.button`
   border: none;
   background: ${(props) => props.theme.yellow};
   color: ${(props) => props.theme.white};
-  hover {
+  &:hover {
     background: ${(props) => props.theme['yellow-light']};
   }
 `

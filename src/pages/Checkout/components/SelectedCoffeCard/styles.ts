@@ -43,7 +43,7 @@ export const FormRows = styled.div`
   input[type='radio']:checked + label {
     border: 1px solid ${(props) => props.theme.purple};
   }
-  :hover {
+  &:hover {
     background: ${(props) => props.theme['base-hover']};
   }
 `

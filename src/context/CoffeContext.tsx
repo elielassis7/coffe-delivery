@@ -41,32 +41,31 @@ type CoffeContextProps = {
 }
 
 export function CoffeContextProvider({ children }: CoffeContextProps) {
-  const [coffeState, dispatch] = useReducer(
-    coffeReducer,
-    {
-      coffes: [],
-      addressDelivery: {
-        cep: '',
-        rua: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        cidade: '',
-        uf: '',
-        typePay: '',
-      },
-      totalOrder: 0,
+  const initialState = {
+    coffes: [],
+    addressDelivery: {
+      cep: '',
+      rua: '',
+      numero: '',
+      complemento: '',
+      bairro: '',
+      cidade: '',
+      uf: '',
+      typePay: '',
     },
-    () => {
-      const storagedData = localStorage.getItem(
-        '@Coffe-Delivery:coffe-state-1.0.0',
-      )
+    totalOrder: 0,
+  }
+  const [coffeState, dispatch] = useReducer(coffeReducer, initialState, () => {
+    const storagedData = localStorage.getItem(
+      '@Coffe-Delivery:coffe-state-1.0.0',
+    )
 
-      if (storagedData) {
-        return JSON.parse(storagedData)
-      }
-    },
-  )
+    if (storagedData) {
+      return JSON.parse(storagedData)
+    } else {
+      return initialState
+    }
+  })
 
   useEffect(() => {
     const stateJson = JSON.stringify(coffeState)
